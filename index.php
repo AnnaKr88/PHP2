@@ -1,21 +1,27 @@
-<?php
-include_once "classes/digital.php";
-include_once "classes/single.php";
-include_once "classes/weight.php";
-
-//1. Создать структуру классов ведения товарной номенклатуры.
-//а) Есть абстрактный товар.
-//б) Есть цифровой товар, штучный физический товар и товар на вес.
-//в) У каждого есть метод подсчета финальной стоимости.
-//г) У цифрового товара стоимость постоянная – дешевле штучного товара в два раза. У штучного товара обычная стоимость, у весового – в зависимости от продаваемого количества в килограммах. У всех формируется в конечном итоге доход с продаж.
-//д) Что можно вынести в абстрактный класс, наследование?
+<?php include_once "config.php";?>
 
 
-$good1 = new digGoods();
-$good1 -> sum();
-echo "<br>";
-$good2 = new singleGoods();
-$good2 -> sum();
-echo "<br>";
-$good3 = new weightGoods(25, 2);
-$good3 -> sum();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gallery</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="main">
+        <div class="content">
+            <?php foreach ($imgs as $img):?>
+
+                    <div class="img-item">
+                        <a href="full.php?id=<?=$img['id']?>" target="_blank"><img src="images/small/<?= $img['name']?>" alt="image" ></a>
+                    </div>
+
+                    <?php
+                         endforeach; ?>
+        </div>
+        
+    </div>
+    
+</body>
+</html>
