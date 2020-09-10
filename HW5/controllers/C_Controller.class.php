@@ -1,4 +1,5 @@
 <?php
+
 abstract class C_Controller{
     protected abstract function render();
 	

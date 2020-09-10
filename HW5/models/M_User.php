@@ -1,32 +1,36 @@
 <?php
 class M_User {
     
-    function newUser($connect, $name, $login, $email, $pass)
-{
-
-    $nu = "INSERT INTO users (name, login, email, pass, rights) VALUES ('%s','%s','%s','%s', 1)";
-
-    $query = sprintf($nu, mysqli_real_escape_string($connect, $name), mysqli_real_escape_string($connect, $login), mysqli_real_escape_string($connect, $email), mysqli_real_escape_string($connect, $pass));
-
-    $result = mysqli_query($connect, $query);
-
-    if (!$result) {
-        die(mysqli_error($connect));
-    }
-
-    return true;
-}
-
-function user($connect, $login) {
-    
-$user = "SELECT * FROM users where login= '$login'";
-
-$result = mysqli_query($connect, $user);
-
-if (!$result) {
-        die(mysqli_error($connect));
+    protected $login, $name, $email, $pass, $db;   
+    public function connect(){
+        $db =  new PDO (DRIVER . ':host='. SERVER . ';dbname=' . DB, LOGIN, PASS);
+        
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        
+        return $db;
     }
     
-    return $result;
-}
+    public function newUser ($login, $name, $email, $pass) {
+        $result = $this->connect()->prepare("INSERT INTO users (name, login, email, pass, rights) VALUES (:name, :login, :email, :pass, :rights)");
+        $result -> execute(array(
+            ':name'=>$name,
+            ':login'=>$login,
+            ':email'=>$email,
+            ':pass'=>$pass,
+            ':rights'=>1,
+        ));  
+        return true;
+    }
+    
+    public function getUser ($login) {
+        $result = $this->connect()->prepare("SELECT * FROM users WHERE login = :login");
+        $result -> execute(array(
+            ':login'=>$login,
+        ));  
+        while($row = $result->fetch())
+	       {
+		  $res[]=$row;
+	       }
+        return $res;
+    }
 }

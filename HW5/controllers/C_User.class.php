@@ -1,6 +1,5 @@
 <?php
 include_once "models/M_User.php";
-
 class C_User extends C_Base {
     protected function before(){
         $this->title = '';
@@ -9,21 +8,57 @@ class C_User extends C_Base {
     
     public function action_auth(){
         $this->title= 'Регистрация';
-		$this->content = $this->Template('views/v_main.php', array('content' => include "views/v_auth.php"));	
+		$this->content = $this->Template('templates/t_reg.tmpl');	       
+        if(isset($_POST['addNewUser'])){
+            $login = $_POST['login'];
+            $pass = $_POST['pass'];
+            $email = $_POST['email'];
+            $name = $_POST['name'];  
+            $userR = new M_User;
+            $result = $userR -> newUser($login, $name, $email, $pass);
+            if($result) {
+                echo "Успешно!";
+            }
+        }
 	}
     
     public function action_log(){
+        if(isset($_POST['in'])){ 
+            $login = $_POST['login'];
+            $pass = $_POST['pass'];
+            $userL = new M_User;            
+            $result = $userL -> getUser($login);
+            foreach ($result as $item) {
+                if ($login == $item['login'] and ($pass) == $item['pass']) {
+                $_SESSION['login'] = $item['login'];
+                $_SESSION['pass'] = $item['pass'];
+                $this->title= 'Личный кабинет';
+                $this->content = $this->Template('views/v_profile.php', array('content' => $item['login']));
+                } 
+                else {
+                    echo "Не правильно ввели данные!";
+                    $this->content = $this->Template('templates/t_log.tmpl');
+                    }
+            }
+        } else {
         $this->title= 'Вход';
-        $user = new M_User();
-        if(isset($_POST['in'])){
-            $login = trim(strip_tags($_POST['login']));
-            $pass = trim(strip_tags($_POST['pass']));
-            $info = $user->user($connect, $login);
-		    $this->content = $this->Template('views/v_profile.php', array('content' => $info));
-		}
-		else{
-		   $this->content = $this->Template('views/v_log.php');
-		}
+		$this->content = $this->Template('templates/t_log.tmpl');
+        }
     }
+    public function action_profile(){
+        $this->title= 'Личный кабинет';
+		$user = new M_User;            
+        $result = $user -> getUser($_SESSION['login']);
+        foreach ($result as $item) {                
+                $this->title= 'Личный кабинет';
+                $this->content = $this->Template('views/v_profile.php', array('content' => $item['login']));
+                } 
+                	
+	}
     
-}
+    public function action_logout(){        
+            unset($_SESSION['login']);
+            unset($_SESSION['pass']);
+            session_destroy();	
+            header('Location: index.php');
+}}

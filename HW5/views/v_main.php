@@ -8,7 +8,7 @@
 </head>
 <body>
     <main>
-        <?=$content?>
+       <?= $content?>
     </main>
     <footer><?=$footer?></footer>
 </body>
