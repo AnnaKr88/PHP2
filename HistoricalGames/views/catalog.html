@@ -1,0 +1,23 @@
+{%include 'templates/header.html'%}
+<div class="category">
+
+</div>
+<div class="catalog_gallery">
+    <h1>Our Gallery</h1>
+    <div class="products">
+
+        {% for product in content_data %}
+            
+            <div class="product-item">
+                        <a href="index.php?path=full/{{product.id}}" target="_blank"><img src="img/small/{{product.img}}" alt="image" style="float: left; margin: 5px 10px 15px 5px;"></a>
+                        <div class="desc">
+                            <a href="index.php?path=full/{{product.id}}" target="_blank"><h5>{{product.title}}</h5></a>
+                            <p><b>Genre: </b> {{product.genre}}</p>
+                            <span class="price">$ {{product.price}}</span> <a href="index.php?path=full/{{product.id}}" target="_blank">More..</a>
+                        </div>
+                    </div>
+        {%endfor%}
+
+    </div>
+</div>
+{%include 'templates/footer.html'%}

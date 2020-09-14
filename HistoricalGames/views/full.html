@@ -1,0 +1,19 @@
+{%include 'templates/header.html'%}
+{% for product in content_data %}
+<div class="prodFull">
+    <h2>{{product.title}}</h2>
+    <div class="l-block"><img src="../public/img/big/{{product.img}}" alt="">
+        <span>Price: {{product.price}}</span>
+        <?php if(!isset($_SESSION['login'])):?>
+        <p>Вы не зарегистрированы!</p>
+        <?php else:?>
+        <input type="button" class="buy-btn" value="BUY" onclick="buy({{product.id}})" data-id="{{product.id}}">
+        <?php endif;?>
+    </div>
+    <div class="r-block">
+        <p>{{product.full_info}}</p>
+    </div>
+</div>
+{%endfor%}
+{{content_data}}
+{%include 'templates/footer.html'%}
